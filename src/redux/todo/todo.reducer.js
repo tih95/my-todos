@@ -1,4 +1,4 @@
-import { addTodo } from './todo.utils';
+import { addTodo, removeTodo } from './todo.utils';
 
 const INITIAL_STATE = {
   todos: [ 
@@ -17,6 +17,11 @@ const todoReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         todos: addTodo(state.todos, action.payload)
+      }
+    case 'REMOVE_TODO':
+      return {
+        ...state,
+        todos: removeTodo(state.todos, action.payload)
       }
     default: 
       return state;
