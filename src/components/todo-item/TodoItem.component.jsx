@@ -1,21 +1,22 @@
 import React from 'react';
-import { FaTrash, FaCheck } from 'react-icons/fa';
+import { FaTrash } from 'react-icons/fa';
 import { connect } from 'react-redux';
 import dayjs from 'dayjs';
 
-import { removeTodo, completeTodo } from '../../redux/todo/todo.actions';
+import { removeTodo, toggleComplete } from '../../redux/todo/todo.actions';
 
 import './TodoItem.styles.scss';
 
-const TodoItem = ({ todoItem, removeTodo, completeTodo }) => {
-  const { dueDate, name } = todoItem;
+const TodoItem = ({ todoItem, removeTodo, toggleComplete }) => {
+  const { dueDate, name, completed } = todoItem;
 
   return (
-    <div className="todo-item">
-      {todoItem.completed 
-        ? null
-        : <FaCheck onClick={() => completeTodo(todoItem)} />
-      }
+    <div className={`todo-item ${completed ? 'completed' : 'not-completed'}`}>
+      <input 
+        type="checkbox" 
+        onChange={() => toggleComplete(todoItem)} 
+        checked={completed} 
+      />
       <p>{name} </p>
       {
         !dueDate 
@@ -30,7 +31,7 @@ const TodoItem = ({ todoItem, removeTodo, completeTodo }) => {
 const mapDispatchToProps = dispatch => {
   return {
     removeTodo: todo => dispatch(removeTodo(todo)),
-    completeTodo: todo => dispatch(completeTodo(todo))
+    toggleComplete: todo => dispatch(toggleComplete(todo))
   }
 }
 

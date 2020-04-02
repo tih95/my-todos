@@ -10,11 +10,11 @@ export const removeTodo = (todos, todoToRemove) => {
   return todos.filter(todo => todo.id !== foundTodo.id);
 }
 
-export const completeTodo = (todos, todoToComplete) => {
+export const toggleComplete = (todos, todoToToggle) => {
   const copy = [...todos];
 
-  const foundTodoIndex = copy.findIndex(todo => todo.id === todoToComplete.id);
-  copy[foundTodoIndex].completed = true;
+  const foundTodoIndex = copy.findIndex(todo => todo.id === todoToToggle.id);
+  copy[foundTodoIndex].completed = !copy[foundTodoIndex].completed;
 
   return copy; 
 }

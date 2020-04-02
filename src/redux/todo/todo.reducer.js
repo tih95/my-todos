@@ -1,4 +1,4 @@
-import { addTodo, removeTodo, completeTodo } from './todo.utils';
+import { addTodo, removeTodo, toggleComplete } from './todo.utils';
 
 const INITIAL_STATE = {
   todos: [ 
@@ -25,10 +25,10 @@ const todoReducer = (state = INITIAL_STATE, action) => {
         ...state,
         todos: removeTodo(state.todos, action.payload)
       }
-    case 'COMPLETE_TODO':
+    case 'TOGGLE_COMPLETE':
       return {
         ...state,
-        todos: completeTodo(state.todos, action.payload)
+        todos: toggleComplete(state.todos, action.payload)
       }
     default: 
       return state;
