@@ -1,16 +1,26 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+
 import TodoForm from './components/todo-form/TodoForm.component';
 import TodoList from './components/todo-list/TodoList.component';
 
 import './App.css';
+import { selectCurrentTodos, selectCompletedTodos } from './redux/todo/todo.selectors';
 
-const App = () => {
+const App = ({ currentTodos, completedTodos }) => {
   return (
     <div className="App">
-      <TodoList />
       <TodoForm />
+      <TodoList todoItems={currentTodos} title="Active" />
+      <TodoList todoItems={completedTodos} title="Completed" />
     </div>
   );
 }
 
-export default App;
+const mapStateToProps = createStructuredSelector({
+  currentTodos: selectCurrentTodos,
+  completedTodos: selectCompletedTodos
+})
+
+export default connect(mapStateToProps)(App);

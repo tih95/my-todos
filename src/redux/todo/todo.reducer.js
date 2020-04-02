@@ -1,4 +1,4 @@
-import { addTodo, removeTodo } from './todo.utils';
+import { addTodo, removeTodo, completeTodo } from './todo.utils';
 
 const INITIAL_STATE = {
   todos: [ 
@@ -6,7 +6,9 @@ const INITIAL_STATE = {
       id: 1,
       name: 'Get poop',
       description: 'Go outside get this and come back in',
-      date: new Date()
+      date: new Date(),
+      completed: false,
+      dueDate: new Date()
     }
   ]
 }
@@ -22,6 +24,11 @@ const todoReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         todos: removeTodo(state.todos, action.payload)
+      }
+    case 'COMPLETE_TODO':
+      return {
+        ...state,
+        todos: completeTodo(state.todos, action.payload)
       }
     default: 
       return state;

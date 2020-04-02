@@ -9,3 +9,12 @@ export const selectTodoItems = createSelector(
   todo => todo.todos
 )
 
+export const selectCurrentTodos = createSelector(
+  [selectTodoItems],
+  todoItems => todoItems.filter(todo => !todo.completed)
+)
+
+export const selectCompletedTodos = createSelector(
+  [selectTodoItems],
+  todoItems => todoItems.filter(todo => todo.completed)
+)

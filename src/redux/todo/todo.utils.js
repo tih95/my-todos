@@ -9,3 +9,12 @@ export const removeTodo = (todos, todoToRemove) => {
 
   return todos.filter(todo => todo.id !== foundTodo.id);
 }
+
+export const completeTodo = (todos, todoToComplete) => {
+  const copy = [...todos];
+
+  const foundTodoIndex = copy.findIndex(todo => todo.id === todoToComplete.id);
+  copy[foundTodoIndex].completed = true;
+
+  return copy; 
+}

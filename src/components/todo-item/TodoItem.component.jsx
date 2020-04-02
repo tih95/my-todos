@@ -1,22 +1,36 @@
 import React from 'react';
-import { FaTimes } from 'react-icons/fa';
+import { FaTrash, FaCheck } from 'react-icons/fa';
 import { connect } from 'react-redux';
+import dayjs from 'dayjs';
 
-import { removeTodo } from '../../redux/todo/todo.actions';
-import { TodoItemContainer } from './TodoItem.styles';
+import { removeTodo, completeTodo } from '../../redux/todo/todo.actions';
 
-const TodoItem = ({ todoItem, removeTodo }) => {
+import './TodoItem.styles.scss';
+
+const TodoItem = ({ todoItem, removeTodo, completeTodo }) => {
+  const { dueDate, name } = todoItem;
+
   return (
-    <TodoItemContainer>
-      <p>{todoItem.name} </p>
-      <FaTimes onClick={() => removeTodo(todoItem)} />
-    </TodoItemContainer>
+    <div className="todo-item">
+      {todoItem.completed 
+        ? null
+        : <FaCheck onClick={() => completeTodo(todoItem)} />
+      }
+      <p>{name} </p>
+      {
+        !dueDate 
+          ? null
+          : <p>{dayjs(dueDate).format('MMM D')}</p>
+      }
+      <FaTrash onClick={() => removeTodo(todoItem)} />
+    </div>
   )
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    removeTodo: todo => dispatch(removeTodo(todo))
+    removeTodo: todo => dispatch(removeTodo(todo)),
+    completeTodo: todo => dispatch(completeTodo(todo))
   }
 }
 

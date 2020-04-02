@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import uuid from 'react-uuid';
+import DaypickerInput from 'react-day-picker/DayPickerInput';
+import 'react-day-picker/lib/style.css';
 
 import { addTodo } from '../../redux/todo/todo.actions';
 
 const TodoForm = ({ addTodo }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const [dueDate, setDueDate] = useState(null);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -15,11 +18,14 @@ const TodoForm = ({ addTodo }) => {
       id: uuid(),
       name: name,
       description: description,
-      date: new Date()
+      date: new Date(),
+      completed: false,
+      dueDate: dueDate
     })
 
     setName('');
     setDescription('');
+    setDueDate(null);
   }
   
   return (
@@ -38,7 +44,13 @@ const TodoForm = ({ addTodo }) => {
           placeholder="Enter a description"
           onChange={(e) => setDescription(e.target.value)}
         />
+        <DaypickerInput 
+          required
+          selectedDay={dueDate}
+          onDayChange={(selectedDay) => setDueDate(selectedDay)}
+        />
         <button>Add Todo</button>
+        
       </form>
     </div>
   )
