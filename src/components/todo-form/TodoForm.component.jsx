@@ -45,7 +45,6 @@ const TodoForm = ({ addTodo }) => {
           onChange={(e) => setDescription(e.target.value)}
         />
         <DaypickerInput 
-          required
           selectedDay={dueDate}
           onDayChange={(selectedDay) => setDueDate(selectedDay)}
         />

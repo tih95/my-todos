@@ -1,19 +1,20 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import { Route, Switch } from 'react-router-dom';
+import HomePage from './pages/HomePage/Home.page.jsx';
 
-import TodoForm from './components/todo-form/TodoForm.component';
-import TodoList from './components/todo-list/TodoList.component';
+import { selectCurrentTodos, selectCompletedTodos } from './redux/todo/todo.selectors';
 
 import './App.css';
-import { selectCurrentTodos, selectCompletedTodos } from './redux/todo/todo.selectors';
+
 
 const App = ({ currentTodos, completedTodos }) => {
   return (
     <div className="App">
-      <TodoForm />
-      <TodoList todoItems={currentTodos} title="Active" />
-      <TodoList todoItems={completedTodos} title="Completed" />
+      <Switch>
+        <Route exact path="/" component={HomePage} />
+      </Switch>
     </div>
   );
 }
