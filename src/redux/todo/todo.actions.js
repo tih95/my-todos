@@ -1,3 +1,10 @@
+export const setTodos = todos => {
+  return {
+    type: 'SET_TODOS',
+    payload: todos
+  }
+}
+
 export const addTodo = todo => {
   return {
     type: 'ADD_TODO',

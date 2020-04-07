@@ -1,20 +1,16 @@
 import { addTodo, removeTodo, toggleComplete } from './todo.utils';
 
 const INITIAL_STATE = {
-  todos: [ 
-    {
-      id: 1,
-      name: 'Get poop',
-      description: 'Go outside get this and come back in',
-      date: new Date(),
-      completed: false,
-      dueDate: new Date()
-    }
-  ]
+  todos: []
 }
 
 const todoReducer = (state = INITIAL_STATE, action) => {
   switch(action.type) {
+    case 'SET_TODOS':
+      return {
+        ...state,
+        todos: action.payload
+      }
     case 'ADD_TODO':
       return {
         ...state,
