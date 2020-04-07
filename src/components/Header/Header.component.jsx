@@ -1,11 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { auth } from '../../firebase/firebase.utils';
 
 import { NavbarWrapper, Nav } from './Header.styles';
 
-const Header = ({ currentUser }) => {
+const Header = ({ currentUser, history }) => {
   
   return (
     <Nav>
@@ -13,7 +13,10 @@ const Header = ({ currentUser }) => {
         <Link to="/">My-Todos</Link>
         <div>
           {currentUser ? 
-            <button onClick={() => auth.signOut()}>Sign out</button>
+            <button onClick={() => {
+              auth.signOut()
+              history.push('/')
+            }}>Sign out</button>
             : 
             <div>
               <Link to="/signup">Sign Up</Link>
@@ -30,4 +33,4 @@ const mapStateToProps = state => ({
   currentUser: state.user.currentUser
 })
 
-export default connect(mapStateToProps)(Header);
+export default withRouter(connect(mapStateToProps)(Header));

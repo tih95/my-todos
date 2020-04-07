@@ -3,7 +3,7 @@ import { auth, createUserProfileDocument } from '../../firebase/firebase.utils';
 
 import { Input, Button, Form, SignUp, InputLabel, PageHeader } from './SignUp.styles';
 
-const SignUpPage = () => {
+const SignUpPage = ({ history }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -19,7 +19,7 @@ const SignUpPage = () => {
 
     try {
       const { user } = await auth.createUserWithEmailAndPassword(email, password);
-      
+      history.push('/dashboard');
       createUserProfileDocument(user, name);
     }
     catch(e) {

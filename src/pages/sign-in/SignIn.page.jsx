@@ -4,7 +4,7 @@ import { auth } from '../../firebase/firebase.utils';
 import { SignIn } from './SignIn.styles';
 import { PageHeader, InputLabel, Input, Form, Button, LinkWrapper } from './SignIn.styles';
 
-const SignInPage = () => {
+const SignInPage = ({ history }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -13,6 +13,7 @@ const SignInPage = () => {
 
     try {
       await auth.signInWithEmailAndPassword(email, password);
+      history.push('/dashboard');
     }
     catch(e) {
       console.log(e);

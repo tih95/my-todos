@@ -6,10 +6,13 @@ import { auth, firestore } from './firebase/firebase.utils';
 import HomePage from './pages/home-page/Home.page.jsx';
 import SignUpPage from './pages/sign-up/SignUp.page';
 import SignInPage from './pages/sign-in/SignIn.page';
+import Dashboard from './pages/dashboard/Dashboard';
 import { setCurrentUser } from './redux/user/user.actions';
 import Header from './components/Header/Header.component';
 
 import './App.css';
+
+
 
 const App = ({ setCurrentUser, currentUser }) => {
 
@@ -44,14 +47,15 @@ const App = ({ setCurrentUser, currentUser }) => {
         <Route 
           exact 
           path="/" 
-          render={HomePage} 
+          render={() => currentUser ? <Redirect to="/dashboard"/> : <HomePage />} 
         />
         <Route exact path="/signup" render={() => {
-          return currentUser ? <Redirect to="/" /> : <SignUpPage />
+          return currentUser ? <Redirect to="/dashboard" /> : <SignUpPage />
         }}/>
         <Route exact path="/signin" render={() => {
-          return currentUser ? <Redirect to="/" /> : <SignInPage />
+          return currentUser ? <Redirect to="/dashboard" /> : <SignInPage />
         }}/>
+        <Route exact path="/dashboard" render={() => currentUser ? <Dashboard /> : <Redirect to="/" />} />
       </Switch>
     </div>
   );
