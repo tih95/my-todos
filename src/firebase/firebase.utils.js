@@ -15,3 +15,22 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 export const auth = firebase.auth();
+export const firestore = firebase.firestore();
+
+export const createUserProfileDocument = async (user, name) => {
+  
+  const userRef = firestore.collection('users').doc(user.uid);
+
+  try {
+    await userRef.set({
+      displayName: name,
+      email: user.email,
+      dateCreated: new Date()
+    })
+  }
+  catch(e) {
+    console.log(e);
+  }
+}
+
+export default firebase;

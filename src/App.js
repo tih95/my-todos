@@ -1,27 +1,68 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { Route, Switch } from 'react-router-dom';
-import HomePage from './pages/HomePage/Home.page.jsx';
+import { Route, Switch, Redirect } from 'react-router-dom';
 
-import { selectCurrentTodos, selectCompletedTodos } from './redux/todo/todo.selectors';
+import { auth, firestore } from './firebase/firebase.utils';
+import HomePage from './pages/home-page/Home.page.jsx';
+import SignUpPage from './pages/sign-up/SignUp.page';
+import SignInPage from './pages/sign-in/SignIn.page';
+import { setCurrentUser } from './redux/user/user.actions';
+import Header from './components/Header/Header.component';
 
 import './App.css';
 
+const App = ({ setCurrentUser, currentUser }) => {
 
-const App = ({ currentTodos, completedTodos }) => {
+  useEffect(() => {
+    const unsubscribeFromAuth = auth.onAuthStateChanged(async user => {
+      if (user) {
+        const userRef = firestore.collection('users').doc(user.uid);
+       
+        userRef.onSnapshot(snapshot => {
+          if (snapshot.exists) {
+            setCurrentUser({
+              id: snapshot.id,
+              ...snapshot.data()
+            })
+          }
+        })
+      }
+      else {
+        setCurrentUser(user);
+      }
+    })
+    
+    return () => {
+      unsubscribeFromAuth();
+    }
+  }, [])
+
   return (
     <div className="App">
+      <Header />
       <Switch>
-        <Route exact path="/" component={HomePage} />
+        <Route 
+          exact 
+          path="/" 
+          render={HomePage} 
+        />
+        <Route exact path="/signup" render={() => {
+          return currentUser ? <Redirect to="/" /> : <SignUpPage />
+        }}/>
+        <Route exact path="/signin" render={() => {
+          return currentUser ? <Redirect to="/" /> : <SignInPage />
+        }}/>
       </Switch>
     </div>
   );
 }
 
-const mapStateToProps = createStructuredSelector({
-  currentTodos: selectCurrentTodos,
-  completedTodos: selectCompletedTodos
+const mapDispatchToProps = dispatch => ({
+  setCurrentUser: user => dispatch(setCurrentUser(user))
 })
 
-export default connect(mapStateToProps)(App);
+const mapStateToProps = state => ({
+  currentUser: state.user.currentUser
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
