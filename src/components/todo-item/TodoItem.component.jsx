@@ -21,7 +21,7 @@ const TodoItem = ({ todoItem, removeTodo, toggleComplete }) => {
       {
         !dueDate 
           ? null
-          : <p>{dayjs(dueDate).format('MMM D')}</p>
+          : <p>{dayjs(dueDate.toDate()).format('MMM D')}</p>
       }
       <FaTrash onClick={() => removeTodo(todoItem)} />
     </div>

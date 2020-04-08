@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import uuid from 'react-uuid';
 import DaypickerInput from 'react-day-picker/DayPickerInput';
 import 'react-day-picker/lib/style.css';
+import { createStructuredSelector } from 'reselect';
 
+import { selectCurrentUser } from '../../redux/user/user.selectors';
 import { addTodo } from '../../redux/todo/todo.actions';
 
-const TodoForm = ({ addTodo }) => {
+
+const TodoForm = ({ currentUser, dispatch }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState(null);
@@ -14,14 +16,16 @@ const TodoForm = ({ addTodo }) => {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    addTodo({
-      id: uuid(),
-      name: name,
-      description: description,
-      date: new Date(),
-      completed: false,
-      dueDate: dueDate
-    })
+    dispatch(addTodo(
+      {
+        name: name,
+        description: description,
+        date: new Date(),
+        completed: false,
+        dueDate: dueDate
+      },
+      currentUser.id
+    ))
 
     setName('');
     setDescription('');
@@ -55,10 +59,8 @@ const TodoForm = ({ addTodo }) => {
   )
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    addTodo: todo => dispatch(addTodo(todo))
-  }
-}
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser
+})
 
-export default connect(null, mapDispatchToProps)(TodoForm);
+export default connect(mapStateToProps)(TodoForm);

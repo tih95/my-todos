@@ -1,20 +1,46 @@
-import { addTodo, removeTodo, toggleComplete } from './todo.utils';
+import { removeTodo, toggleComplete } from './todo.utils';
 
 const INITIAL_STATE = {
-  todos: []
+  todos: [],
+  loading: false,
+  error: null
 }
 
 const todoReducer = (state = INITIAL_STATE, action) => {
   switch(action.type) {
-    case 'SET_TODOS':
+    case 'SET_TODOS_BEGIN':
       return {
         ...state,
+        loading: true
+      }
+    case 'SET_TODOS_SUCCESS':
+      return {
+        ...state,
+        loading: false,
+        error: null,
         todos: action.payload
       }
-    case 'ADD_TODO':
+    case 'SET_TODOS_FAILURE':
       return {
         ...state,
-        todos: addTodo(state.todos, action.payload)
+        loading: false,
+        error: action.payload
+      }
+    case 'ADD_TODO_BEGIN':
+      return {
+        ...state,
+        loading: true
+      }
+    case 'ADD_TODO_SUCCESS':
+      return {
+        ...state,
+        todos: [...state.todos, action.payload]
+      }
+    case 'ADD_TODO_FAILURE':
+      return {
+        ...state,
+        loading: false,
+        error: action.payload
       }
     case 'REMOVE_TODO':
       return {

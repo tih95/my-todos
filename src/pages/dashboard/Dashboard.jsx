@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { firestore } from '../../firebase/firebase.utils';
 
 import { selectCurrentUser } from '../../redux/user/user.selectors';
 import { selectCurrentTodos, selectCompletedTodos } from '../../redux/todo/todo.selectors';
@@ -9,28 +8,11 @@ import { setTodos } from '../../redux/todo/todo.actions';
 import TodoForm from '../../components/todo-form/TodoForm.component';
 import TodoList from '../../components/todo-list/TodoList.component';
 
-const Dashboard = ({ currentUser, currentTodos, completedTodos, setTodos }) => {
+const Dashboard = ({ currentUser, currentTodos, completedTodos, dispatch }) => {
   
   useEffect(() => {
-    const initializeTodos = async () => {
-      const todosToSet = [];
-
-      const todosSnapshot = await firestore.collection(`users/${currentUser.id}/todos`).get();
-
-      todosSnapshot.forEach(docSnapShot => {
-        const dueDate = docSnapShot.get('dueDate');
-
-        todosToSet.push({
-          id: docSnapShot.id,
-          ...docSnapShot.data(),
-          dueDate: dueDate.toDate()
-        })
-      })
-
-      setTodos(todosToSet);
-    }
     
-    initializeTodos();
+    dispatch(setTodos(currentUser.id));
 
     return () => {
       
@@ -53,8 +35,8 @@ const mapStateToProps = createStructuredSelector({
   completedTodos: selectCompletedTodos 
 })
 
-const mapDispatchToProps = dispatch => ({
-  setTodos: todos => dispatch(setTodos(todos))
-})
+// const mapDispatchToProps = dispatch => ({
+//   setTodos: todos => dispatch(setTodos(todos))
+// })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+export default connect(mapStateToProps)(Dashboard);
