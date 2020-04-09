@@ -47,11 +47,23 @@ const todoReducer = (state = INITIAL_STATE, action) => {
         ...state,
         todos: removeTodo(state.todos, action.payload)
       }
-    case 'TOGGLE_COMPLETE':
+    case 'TOGGLE_COMPLETE_BEGIN':
       return {
         ...state,
+        loading: true
+      }
+    case 'TOGGLE_COMPLETE_SUCCESS':
+      return {
+        ...state,
+        loading: false,
         todos: toggleComplete(state.todos, action.payload)
       }
+    case 'TOGGLE_COMPLETE_FAILURE':
+        return {
+          ...state,
+          loading: false,
+          error: action.payload
+        }
     default: 
       return state;
   }

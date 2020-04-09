@@ -94,9 +94,41 @@ export const removeTodo = todo => {
   }
 }
 
-export const toggleComplete = todo => {
+export const toggleComplete = (todo, userId) => {
+  
+  return async dispatch => {
+    dispatch(toggleCompleteBegin());
+
+    const todoRef = firestore.collection(`/users/${userId}/todos`).doc(`${todo.id}`);
+
+    try {
+      const updatedTodo = {...todo, completed: !todo.completed}
+      await todoRef.update(updatedTodo)
+
+      dispatch(toggleCompleteSuccess(updatedTodo));
+    }
+    catch(e) {
+      dispatch(toggleCompleteFailure())
+    }
+  }
+}
+
+export const toggleCompleteBegin = () => {
   return {
-    type: 'TOGGLE_COMPLETE',
+    type: 'TOGGLE_COMPLETE_BEGIN'
+  }
+}
+
+export const toggleCompleteSuccess = todo => {
+  return {
+    type: 'TOGGLE_COMPLETE_SUCCESS',
     payload: todo
+  }
+}
+
+export const toggleCompleteFailure = error => {
+  return {
+    type: 'TOGGLE_COMPLETE_FAILURE',
+    payload: error
   }
 }

@@ -1,20 +1,22 @@
 import React from 'react';
 import { FaTrash } from 'react-icons/fa';
 import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 import dayjs from 'dayjs';
 
 import { removeTodo, toggleComplete } from '../../redux/todo/todo.actions';
+import { selectCurrentUser } from '../../redux/user/user.selectors';
 
 import './TodoItem.styles.scss';
 
-const TodoItem = ({ todoItem, removeTodo, toggleComplete }) => {
+const TodoItem = ({ todoItem, removeTodo, toggleComplete, currentUser }) => {
   const { dueDate, name, completed } = todoItem;
-
+  
   return (
     <div className={`todo-item ${completed ? 'completed' : 'not-completed'}`}>
       <input 
         type="checkbox" 
-        onChange={() => toggleComplete(todoItem)} 
+        onChange={() => toggleComplete(todoItem, currentUser.id)} 
         checked={completed} 
       />
       <p>{name} </p>
@@ -28,11 +30,15 @@ const TodoItem = ({ todoItem, removeTodo, toggleComplete }) => {
   )
 }
 
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser
+})
+
 const mapDispatchToProps = dispatch => {
   return {
     removeTodo: todo => dispatch(removeTodo(todo)),
-    toggleComplete: todo => dispatch(toggleComplete(todo))
+    toggleComplete: (todo, userId) => dispatch(toggleComplete(todo, userId))
   }
 }
 
-export default connect(null, mapDispatchToProps)(TodoItem);
+export default connect(mapStateToProps, mapDispatchToProps)(TodoItem);
