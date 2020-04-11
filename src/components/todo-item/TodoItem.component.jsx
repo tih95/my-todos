@@ -25,7 +25,7 @@ const TodoItem = ({ todoItem, removeTodo, toggleComplete, currentUser }) => {
           ? null
           : <p>{dayjs(dueDate.toDate()).format('MMM D')}</p>
       }
-      <FaTrash onClick={() => removeTodo(todoItem)} />
+      <FaTrash onClick={() => removeTodo(todoItem, currentUser.id)} />
     </div>
   )
 }
@@ -36,7 +36,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = dispatch => {
   return {
-    removeTodo: todo => dispatch(removeTodo(todo)),
+    removeTodo: (todo, userId) => dispatch(removeTodo(todo, userId)),
     toggleComplete: (todo, userId) => dispatch(toggleComplete(todo, userId))
   }
 }

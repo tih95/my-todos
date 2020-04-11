@@ -1,4 +1,5 @@
 export const removeTodo = (todos, todoToRemove) => {
+  console.log(todoToRemove);
   const foundTodo = todos.find(todo => todo.id === todoToRemove.id);
 
   return todos.filter(todo => todo.id !== foundTodo.id);

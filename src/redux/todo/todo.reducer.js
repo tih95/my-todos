@@ -42,10 +42,22 @@ const todoReducer = (state = INITIAL_STATE, action) => {
         loading: false,
         error: action.payload
       }
-    case 'REMOVE_TODO':
+    case 'REMOVE_TODO_BEGIN':
       return {
         ...state,
+        loading: true
+      }
+    case 'REMOVE_TODO_SUCCESS':
+      return {
+        ...state,
+        loading: false,
         todos: removeTodo(state.todos, action.payload)
+      }
+    case 'REMOVE_TODO_FAILURE':
+      return {
+        ...state,
+        error: action.payload,
+        loading: false
       }
     case 'TOGGLE_COMPLETE_BEGIN':
       return {

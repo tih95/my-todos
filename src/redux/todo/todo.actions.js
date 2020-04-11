@@ -87,10 +87,38 @@ export const addTodoFailure = error => {
   }
 }
 
-export const removeTodo = todo => {
+export const removeTodo = (todo, userId) => {
+  return async dispatch => {
+    dispatch(removeTodoBegin());
+
+    try {
+      await firestore.collection(`users/${userId}/todos`).doc(`${todo.id}`).delete();
+
+      dispatch(removeTodoSuccess(todo))
+    }
+    catch(e) {
+      dispatch(removeTodoFailure(e))
+    }
+  }
+}
+
+export const removeTodoBegin = () => {
   return {
-    type: 'REMOVE_TODO',
+    type: 'REMOVE_TODO_BEGIN'
+  }
+}
+
+export const removeTodoSuccess = todo => {
+  return {
+    type: 'REMOVE_TODO_SUCCESS',
     payload: todo
+  }
+}
+
+export const removeTodoFailure = error => {
+  return {
+    type: 'REMOVE_TODO_ERROR',
+    payload: error
   }
 }
 
@@ -105,7 +133,7 @@ export const toggleComplete = (todo, userId) => {
       const updatedTodo = {...todo, completed: !todo.completed}
       await todoRef.update(updatedTodo)
 
-      dispatch(toggleCompleteSuccess(updatedTodo));
+      dispatch(toggleCompleteSuccess(todo));
     }
     catch(e) {
       dispatch(toggleCompleteFailure())
